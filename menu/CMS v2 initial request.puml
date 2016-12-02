@@ -1,0 +1,20 @@
+@startuml
+autonumber
+title Show Menu\n in CMS v2
+
+actor User
+participant FrontendCMSv2
+participant Radiality_BE
+database RethinkDB
+
+User -> FrontendCMSv2 : Show Menu Edit UI
+FrontendCMSv2 -> Radiality_BE : Give all 'menu' items
+Radiality_BE -> RethinkDB : READ records\n in 'menu' table
+RethinkDB --> Radiality_BE : 'menu' table\n cursor
+Radiality_BE -> Radiality_BE : Create list (?)
+Radiality_BE --> FrontendCMSv2 : List of all items
+FrontendCMSv2 -> FrontendCMSv2 : Parse response\n and create 'tree' (?)
+FrontendCMSv2 -> FrontendCMSv2 : Render UI
+FrontendCMSv2 --> User : Show menu
+
+@enduml

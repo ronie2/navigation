@@ -1,0 +1,21 @@
+@startuml
+autonumber
+title Add SubMenu\n in CMS v2
+
+actor User
+participant FrontendCMSv2
+participant Radiality_BE
+database RethinkDB
+
+User -> FrontendCMSv2 : Add SubMenu\n (title, link, type)
+FrontendCMSv2 -> Radiality_BE : CREATE child\n (<b>parent_ID</b>)
+Radiality_BE -> RethinkDB : CREATE SubMenu record\n in 'menu' table
+Radiality_BE -> RethinkDB : UPDATE Parent with child\n record in 'menu' table
+RethinkDB --> Radiality_BE : 'menu' table cursor
+Radiality_BE -> Radiality_BE : Create list (?)
+Radiality_BE --> FrontendCMSv2 : List of all items
+FrontendCMSv2 -> FrontendCMSv2 : Parse response\n and create 'tree' (?)
+FrontendCMSv2 -> FrontendCMSv2 : Render UI
+FrontendCMSv2 --> User : Show menu
+
+@enduml

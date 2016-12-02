@@ -1,0 +1,30 @@
+@startuml
+autonumber
+title Delete SubMenu\n in CMS v2
+
+actor User
+participant FrontendCMSv2
+participant Radiality_BE
+database RethinkDB
+
+User -> FrontendCMSv2 : Delete SubMenu
+FrontendCMSv2 -> Radiality_BE : DELETE 'menu' item\n (<b>Item_ID)
+Radiality_BE -> RethinkDB : Recursively DELETE\n ALL children\n in 'menu' table
+note left
+If Child_ID is
+not in 'menu'
+table
+DO NOTHING
+(Article,
+Product etc.)
+end note
+Radiality_BE -> RethinkDB : DELETE 'menu'\n Item
+Radiality_BE -> RethinkDB : Give all records\n in 'menu' table
+RethinkDB --> Radiality_BE : 'menu' table\n cursor
+Radiality_BE -> Radiality_BE : Create list (?)
+Radiality_BE --> FrontendCMSv2 : List of all items
+FrontendCMSv2 -> FrontendCMSv2 : Parse response\n and create 'tree' (?)
+FrontendCMSv2 -> FrontendCMSv2 : Render UI
+FrontendCMSv2 --> User : Show menu
+
+@enduml
